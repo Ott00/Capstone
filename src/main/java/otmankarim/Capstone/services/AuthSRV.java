@@ -41,6 +41,11 @@ public class AuthSRV {
             throw new BadRequestException("User with email " + newUser.email() + " already exist!");
         });
         Role role = roleDAO.findByRole(newUser.role().toUpperCase()).orElseThrow(() -> new NotFoundException(newUser.role()));
+
+        if (role.getRole().equals("ADMIN")) {
+            throw new BadRequestException("Only admin can create admin user");
+        }
+
         User user = new User(
                 newUser.name(),
                 newUser.surname(),
