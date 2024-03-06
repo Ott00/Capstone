@@ -37,6 +37,10 @@ public class CategorySRV {
         return categoryDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
+    public Category findByName(String name) {
+        return categoryDAO.findByName(name).orElseThrow(() -> new NotFoundException(name));
+    }
+
     public Category updateCategoryById(CategoryDTO updatedCategory, UUID id) {
         Category found = getCategoryById(id);
         found.setName(updatedCategory.name());
