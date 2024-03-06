@@ -36,7 +36,7 @@ public class UserCTRL {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
+    public void deleteUser(@PathVariable UUID id) {
         this.userSRV.delete(id);
     }
 

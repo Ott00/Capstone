@@ -37,7 +37,7 @@ public class RoleCTRL {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Role save(@RequestBody @Validated RoleDTO newRole, BindingResult validation) {
+    public Role saveRole(@RequestBody @Validated RoleDTO newRole, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
@@ -47,7 +47,7 @@ public class RoleCTRL {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
+    public void deleteRole(@PathVariable UUID id) {
         this.roleSRV.delete(id);
     }
 }

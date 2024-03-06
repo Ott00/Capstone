@@ -35,7 +35,7 @@ public class CategoryCTRL {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Category save(@RequestBody @Validated CategoryDTO newCategory, BindingResult validation) {
+    public Category saveCategory(@RequestBody @Validated CategoryDTO newCategory, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
@@ -55,7 +55,7 @@ public class CategoryCTRL {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
+    public void deleteCategory(@PathVariable UUID id) {
         this.categorySRV.delete(id);
     }
 

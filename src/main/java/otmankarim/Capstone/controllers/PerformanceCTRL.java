@@ -37,7 +37,7 @@ public class PerformanceCTRL {
     @PostMapping
     @PreAuthorize("hasAuthority('FREELANCER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Performance save(@AuthenticationPrincipal User freelancer, @RequestBody @Validated PerformanceDTO newPerformance, BindingResult validation) {
+    public Performance savePerformance(@AuthenticationPrincipal User freelancer, @RequestBody @Validated PerformanceDTO newPerformance, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
@@ -57,7 +57,7 @@ public class PerformanceCTRL {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('FREELANCER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID id) {
+    public void deletePerformance(@PathVariable UUID id) {
         this.performanceSRV.delete(id);
     }
 
