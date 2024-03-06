@@ -37,9 +37,17 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
-    public ErrorsPayload handleUnauthorized(NotFoundException ex) {
+    public ErrorsPayload handleUnauthorized(UnauthorizedException ex) {
         return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
     }
+
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+//    public ErrorsPayload handleUnauthorized(HttpMessageNotReadableException ex) {
+//        List<String> errorList = new ArrayList<>();
+//        errorList.add(ex.getMessage());
+//        return new ErrorsPayloadWithList("Your role is probably not authorized for this operation", LocalDateTime.now(), errorList);
+//    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
