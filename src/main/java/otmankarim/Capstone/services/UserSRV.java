@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.NotFoundException;
-import otmankarim.Capstone.payloads.UserDTO;
+import otmankarim.Capstone.payloads.UserUpdateDTO;
 import otmankarim.Capstone.repositories.RoleDAO;
 import otmankarim.Capstone.repositories.UserDAO;
 
@@ -40,7 +40,7 @@ public class UserSRV {
         return userDAO.findByEmail(email).orElseThrow(() -> new NotFoundException("Email " + email + " not found"));
     }
 
-    public User updateUserById(UserDTO updatedUser, UUID id) {
+    public User updateUserById(UserUpdateDTO updatedUser, UUID id) {
         User found = getUserById(id);
         found.setName(updatedUser.name());
         found.setSurname(updatedUser.surname());

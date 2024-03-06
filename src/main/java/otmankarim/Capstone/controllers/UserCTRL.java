@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.BadRequestException;
-import otmankarim.Capstone.payloads.UserDTO;
+import otmankarim.Capstone.payloads.UserUpdateDTO;
 import otmankarim.Capstone.services.UserSRV;
 
 import java.util.UUID;
@@ -45,9 +45,9 @@ public class UserCTRL {
         return this.userSRV.getUserById(user.getId());
     }
 
-    @PostMapping("/me")
+    @PutMapping("/me")
     @ResponseStatus(HttpStatus.CREATED)
-    public User updateMe(@AuthenticationPrincipal User user, @RequestBody @Validated UserDTO updatedUser, BindingResult validation) {
+    public User updateMe(@AuthenticationPrincipal User user, @RequestBody @Validated UserUpdateDTO updatedUser, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
