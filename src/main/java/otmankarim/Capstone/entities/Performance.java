@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"appointments"})
+@JsonIgnoreProperties({"appointments", "reviews"})
 public class Performance {
     @Id
     @GeneratedValue
@@ -36,6 +36,9 @@ public class Performance {
 
     @OneToMany(mappedBy = "performance")
     private Set<Appointment> appointments = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "performance")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
     public Performance(String title, String description, double price, String location, User freelancer, Category category) {
         this.title = title;

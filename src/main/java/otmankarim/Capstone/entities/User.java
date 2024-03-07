@@ -18,7 +18,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"password", "performances", "client_appointments", "credentialsNonExpired", "accountNonExpired", "authorities", "username", "accountNonLocked", "enabled"})
+@JsonIgnoreProperties({"password", "performances", "client_appointments", "reviews", "credentialsNonExpired", "accountNonExpired", "authorities", "username", "accountNonLocked", "enabled"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -41,6 +41,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "client")
     private Set<Appointment> client_appointments = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "client")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
     public User(String name, String surname, String email, String password, String phone, LocalDate birthday, Role role) {
         this.name = name;
