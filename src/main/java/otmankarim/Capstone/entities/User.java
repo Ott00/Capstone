@@ -18,7 +18,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"password", "performances", "credentialsNonExpired", "accountNonExpired", "authorities", "username", "accountNonLocked", "enabled"})
+@JsonIgnoreProperties({"password", "performances", "client_appointments", "credentialsNonExpired", "accountNonExpired", "authorities", "username", "accountNonLocked", "enabled"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -31,12 +31,16 @@ public class User implements UserDetails {
     private String password;
     private String phone;
     private LocalDate birthday;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
     @OneToMany(mappedBy = "freelancer")
     private Set<Performance> performances = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "client")
+    private Set<Appointment> client_appointments = new LinkedHashSet<>();
 
     public User(String name, String surname, String email, String password, String phone, LocalDate birthday, Role role) {
         this.name = name;

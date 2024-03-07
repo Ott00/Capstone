@@ -1,11 +1,14 @@
 package otmankarim.Capstone.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"appointments"})
 public class Performance {
     @Id
     @GeneratedValue
@@ -29,6 +33,9 @@ public class Performance {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "performance")
+    private Set<Appointment> appointments = new LinkedHashSet<>();
 
     public Performance(String title, String description, double price, String location, User freelancer, Category category) {
         this.title = title;

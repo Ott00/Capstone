@@ -51,5 +51,4 @@ public class CategorySRV {
         Category found = getCategoryById(id);
         categoryDAO.delete(found);
     }
-
 }
