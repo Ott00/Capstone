@@ -45,7 +45,7 @@ public class UserSRV {
         found.setName(updatedUser.name());
         found.setSurname(updatedUser.surname());
         found.setEmail(updatedUser.email());
-        found.setPassword(updatedUser.password());
+        found.setPassword(bcrypt.encode(updatedUser.password()));
         found.setPhone(updatedUser.phone());
         found.setBirthday(updatedUser.birthday());
         return userDAO.save(found);

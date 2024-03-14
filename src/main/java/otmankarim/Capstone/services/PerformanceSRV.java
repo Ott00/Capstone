@@ -31,6 +31,12 @@ public class PerformanceSRV {
         return performanceDAO.findAll(pageable);
     }
 
+    public Page<Performance> getMyPerformances(int pageNum, int size, String orderBy, User user) {
+        if (size > 100) size = 100;
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by(orderBy));
+        return performanceDAO.findByFreelancer(user, pageable);
+    }
+
     public Performance save(User freelancer, PerformanceDTO newPerformance) {
         Category category = categorySRV.findByName(newPerformance.category());
 
@@ -53,7 +59,7 @@ public class PerformanceSRV {
         return performanceDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Performance updateCategoryById(PerformanceDTO updatedPerformance, UUID id) {
+    public Performance updatePerformanceById(PerformanceDTO updatedPerformance, UUID id) {
         Category category = categorySRV.findByName(updatedPerformance.category());
         Performance found = getPerformanceById(id);
 

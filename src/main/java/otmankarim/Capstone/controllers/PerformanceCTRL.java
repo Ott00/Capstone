@@ -29,6 +29,15 @@ public class PerformanceCTRL {
         return this.performanceSRV.getPerformances(page, size, orderBy);
     }
 
+    @GetMapping("/me")
+    @PreAuthorize("hasAuthority('FREELANCER')")
+    public Page<Performance> getMyPerformances(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size,
+                                               @RequestParam(defaultValue = "id") String orderBy,
+                                               @AuthenticationPrincipal User user) {
+        return this.performanceSRV.getMyPerformances(page, size, orderBy, user);
+    }
+
     @GetMapping("/{id}")
     public Performance getPerformanceById(@PathVariable UUID id) {
         return this.performanceSRV.getPerformanceById(id);
@@ -43,15 +52,15 @@ public class PerformanceCTRL {
         }
         return this.performanceSRV.save(freelancer, newPerformance);
     }
-
+    
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('FREELANCER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Performance updateCategoryById(@RequestBody @Validated PerformanceDTO updatedPerformance, @PathVariable UUID id, BindingResult validation) {
+    public Performance updatePerformanceId(@RequestBody @Validated PerformanceDTO updatedPerformance, @PathVariable UUID id, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
-        return this.performanceSRV.updateCategoryById(updatedPerformance, id);
+        return this.performanceSRV.updatePerformanceById(updatedPerformance, id);
     }
 
     @DeleteMapping("/{id}")
