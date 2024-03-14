@@ -33,6 +33,8 @@ public class JWTFilter extends OncePerRequestFilter {
             throw new UnauthorizedException("Please put the authorization token in header");
 
         String accessToken = authHeader.substring(7);
+        System.out.println(accessToken);
+
         jwtTools.verifyToken(accessToken);
 
         String id = jwtTools.extractIdFromToken(accessToken);
@@ -48,7 +50,8 @@ public class JWTFilter extends OncePerRequestFilter {
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         return antPathMatcher.match("/auth/**", request.getServletPath())
                 || antPathMatcher.match("/v3/api-docs/**", request.getServletPath())
-                || antPathMatcher.match("/swagger-ui/**", request.getServletPath());
+                || antPathMatcher.match("/swagger-ui/**", request.getServletPath())
+                || antPathMatcher.match("/users", request.getServletPath());
 
     }
 }
