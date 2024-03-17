@@ -48,11 +48,16 @@ public class UserSRV {
         found.setPassword(bcrypt.encode(updatedUser.password()));
         found.setPhone(updatedUser.phone());
         found.setBirthday(updatedUser.birthday());
+        found.setAvatar(getAvatar(updatedUser.name(), updatedUser.surname()));
         return userDAO.save(found);
     }
 
     public void delete(UUID id) {
         User found = getUserById(id);
         userDAO.delete(found);
+    }
+
+    public String getAvatar(String name, String surname) {
+        return "https://ui-avatars.com/api/?name=" + name + "+" + surname;
     }
 }

@@ -31,6 +31,7 @@ public class User implements UserDetails {
     private String password;
     private String phone;
     private LocalDate birthday;
+    private String avatar;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -45,13 +46,14 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "client")
     private Set<Review> reviews = new LinkedHashSet<>();
 
-    public User(String name, String surname, String email, String password, String phone, LocalDate birthday, Role role) {
+    public User(String name, String surname, String email, String password, String phone, LocalDate birthday, String avatar, Role role) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.birthday = birthday;
+        this.avatar = avatar;
         this.role = role;
     }
 

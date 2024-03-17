@@ -53,8 +53,11 @@ public class AuthSRV {
                 bcrypt.encode(newUser.password()),
                 newUser.phone(),
                 newUser.birthday(),
+                userSRV.getAvatar(newUser.name(), newUser.surname()),
                 role
         );
         return userDAO.save(user);
     }
+
+
 }

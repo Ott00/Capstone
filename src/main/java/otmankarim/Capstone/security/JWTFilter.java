@@ -33,7 +33,6 @@ public class JWTFilter extends OncePerRequestFilter {
             throw new UnauthorizedException("Please put the authorization token in header");
 
         String accessToken = authHeader.substring(7);
-        System.out.println(accessToken);
 
         jwtTools.verifyToken(accessToken);
 

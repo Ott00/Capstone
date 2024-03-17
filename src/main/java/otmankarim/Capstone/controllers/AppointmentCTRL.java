@@ -30,6 +30,15 @@ public class AppointmentCTRL {
         return this.appointmentSRV.getAppointments(page, size, orderBy);
     }
 
+    @GetMapping("/me")
+    @PreAuthorize("hasAuthority('FREELANCER')")
+    public Page<Appointment> getMyPerformances(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size,
+                                               @RequestParam(defaultValue = "date") String orderBy,
+                                               @AuthenticationPrincipal User user) {
+        return this.appointmentSRV.getMyAppointments(page, size, orderBy, user);
+    }
+
     @GetMapping("/{id}")
     public Appointment getAppointmentById(@PathVariable UUID id) {
         return this.appointmentSRV.getAppointmentById(id);
