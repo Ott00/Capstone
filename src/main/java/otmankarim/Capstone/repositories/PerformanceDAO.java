@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import otmankarim.Capstone.entities.Category;
 import otmankarim.Capstone.entities.Performance;
 import otmankarim.Capstone.entities.User;
 
@@ -17,4 +18,6 @@ public interface PerformanceDAO extends JpaRepository<Performance, UUID> {
 
     Page<Performance> findByFreelancer(User freelancer,
                                        Pageable pageable);
+
+    Page<Performance> findByCategory(Pageable pageable, Category category);
 }

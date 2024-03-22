@@ -56,11 +56,17 @@ public class AppointmentSRV {
         return appointmentDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Appointment updateCategoryById(AppointmentUpdateDTO updatedAppointment, UUID id) {
+    public Appointment updateAppointmentById(AppointmentUpdateDTO updatedAppointment, UUID id) {
         Appointment found = getAppointmentById(id);
         found.setDate(updatedAppointment.date());
         found.setTime(updatedAppointment.time());
         return appointmentDAO.save(found);
+    }
+
+    public void confirmAppointmentById(UUID id) {
+        Appointment found = getAppointmentById(id);
+        found.setConfirmation(true);
+        appointmentDAO.save(found);
     }
 
     public void delete(UUID id) {

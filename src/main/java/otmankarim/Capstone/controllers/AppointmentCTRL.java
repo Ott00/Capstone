@@ -61,7 +61,14 @@ public class AppointmentCTRL {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
-        return this.appointmentSRV.updateCategoryById(updatedAppointment, id);
+        return this.appointmentSRV.updateAppointmentById(updatedAppointment, id);
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'FREELANCER')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void confirmAppointmentById(@PathVariable UUID id) {
+        this.appointmentSRV.confirmAppointmentById(id);
     }
 
     @DeleteMapping("/{id}")

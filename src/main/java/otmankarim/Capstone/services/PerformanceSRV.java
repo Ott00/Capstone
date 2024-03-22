@@ -37,6 +37,49 @@ public class PerformanceSRV {
         return performanceDAO.findByFreelancer(user, pageable);
     }
 
+    public Page<Performance> getPerformancesFiltered(int pageNum, int size, String orderBy, String category, String direction) {
+
+        if (size > 100) size = 100;
+
+        if (category != null && direction != null) {
+            Sort.Direction sortDirection;
+            if ("desc".equalsIgnoreCase(direction)) {
+                sortDirection = Sort.Direction.DESC;
+            } else sortDirection = Sort.Direction.ASC;
+            Sort sort = Sort.by(sortDirection, orderBy);
+            Pageable pageable = PageRequest.of(pageNum, size, sort);
+            Category categoryFound = categorySRV.findByName(category.toLowerCase());
+            return performanceDAO.findByCategory(pageable, categoryFound);
+        } else if (category != null) {
+            return getPerformancesFilteredByCategory(pageNum, size, orderBy, category);
+        } else if (direction != null) {
+            return getPerformancesOrderedByPrice(pageNum, size, orderBy, direction);
+        } else {
+            return getPerformances(pageNum, size, orderBy); //Back to base case
+        }
+    }
+
+    public Page<Performance> getPerformancesFilteredByCategory(int pageNum, int size, String orderBy, String category) {
+        Category categoryFound = categorySRV.findByName(category.toLowerCase());
+        if (size > 100) size = 100;
+
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by(orderBy));
+        return performanceDAO.findByCategory(pageable, categoryFound);
+    }
+
+    public Page<Performance> getPerformancesOrderedByPrice(int pageNum, int size, String orderBy, String priceDirection) {
+        if (size > 100) size = 100;
+
+        Sort.Direction sortDirection;
+        if ("desc".equalsIgnoreCase(priceDirection)) {
+            sortDirection = Sort.Direction.DESC;
+        } else sortDirection = Sort.Direction.ASC;
+
+        Sort sort = Sort.by(sortDirection, orderBy);
+        Pageable pageable = PageRequest.of(pageNum, size, sort);
+        return performanceDAO.findAll(pageable);
+    }
+
     public Performance save(User freelancer, PerformanceDTO newPerformance) {
         Category category = categorySRV.findByName(newPerformance.category());
 

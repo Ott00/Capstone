@@ -29,6 +29,16 @@ public class PerformanceCTRL {
         return this.performanceSRV.getPerformances(page, size, orderBy);
     }
 
+    @GetMapping("/filter")
+    public Page<Performance> getPerformancesFiltered(@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "10") int size,
+                                                     @RequestParam(defaultValue = "id") String orderBy,
+                                                     @RequestParam(required = false) String category,
+                                                     @RequestParam(required = false) String direction) {
+        return this.performanceSRV.getPerformancesFiltered(page, size, orderBy, category, direction);
+    }
+
+
     @GetMapping("/me")
     @PreAuthorize("hasAuthority('FREELANCER')")
     public Page<Performance> getMyPerformances(@RequestParam(defaultValue = "0") int page,
@@ -52,7 +62,7 @@ public class PerformanceCTRL {
         }
         return this.performanceSRV.save(freelancer, newPerformance);
     }
-    
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('FREELANCER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
