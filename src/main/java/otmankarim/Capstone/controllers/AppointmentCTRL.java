@@ -13,6 +13,7 @@ import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.BadRequestException;
 import otmankarim.Capstone.payloads.AppointmentDTO;
 import otmankarim.Capstone.payloads.AppointmentUpdateDTO;
+import otmankarim.Capstone.payloads.UpdateAppointmentStatusDTO;
 import otmankarim.Capstone.services.AppointmentSRV;
 
 import java.util.UUID;
@@ -67,8 +68,11 @@ public class AppointmentCTRL {
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'FREELANCER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmAppointmentById(@PathVariable UUID id) {
-        this.appointmentSRV.confirmAppointmentById(id);
+    public Appointment updateAppointmentStatusById(@RequestBody @Validated UpdateAppointmentStatusDTO updateAppointmentStatusDTO, @PathVariable UUID id, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return this.appointmentSRV.updateAppointmentStatusById(id, updateAppointmentStatusDTO);
     }
 
     @DeleteMapping("/{id}")

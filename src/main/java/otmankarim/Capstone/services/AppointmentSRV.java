@@ -7,12 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import otmankarim.Capstone.entities.Appointment;
+import otmankarim.Capstone.entities.AppointmentStatus;
 import otmankarim.Capstone.entities.Performance;
 import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.BadRequestException;
 import otmankarim.Capstone.exceptions.NotFoundException;
 import otmankarim.Capstone.payloads.AppointmentDTO;
 import otmankarim.Capstone.payloads.AppointmentUpdateDTO;
+import otmankarim.Capstone.payloads.UpdateAppointmentStatusDTO;
 import otmankarim.Capstone.repositories.AppointmentDAO;
 
 import java.util.UUID;
@@ -24,6 +26,9 @@ public class AppointmentSRV {
 
     @Autowired
     private PerformanceSRV performanceSRV;
+
+    @Autowired
+    private AppointmentStatusSRV appointmentStatusSRV;
 
     public Page<Appointment> getAppointments(int pageNum, int size, String orderBy) {
         if (size > 100) size = 100;
@@ -41,11 +46,13 @@ public class AppointmentSRV {
         if (appointmentDAO.existsAppointmentInSameDateTime(newAppointment.date(), newAppointment.time(), client)) {
             throw new BadRequestException(client.getEmail() + " already have an appointment in same date and time");
         }
+        AppointmentStatus appointmentStatus = appointmentStatusSRV.getAppointmentStatusByName("ATTESA");
         Performance performance = performanceSRV.getPerformanceById(newAppointment.performance_id());
 
         Appointment appointment = new Appointment(
                 newAppointment.date(),
                 newAppointment.time(),
+                appointmentStatus,
                 client,
                 performance
         );
@@ -63,10 +70,11 @@ public class AppointmentSRV {
         return appointmentDAO.save(found);
     }
 
-    public void confirmAppointmentById(UUID id) {
-        Appointment found = getAppointmentById(id);
-        found.setConfirmation(true);
-        appointmentDAO.save(found);
+    public Appointment updateAppointmentStatusById(UUID appointmentId, UpdateAppointmentStatusDTO appointmentStatusDTO) {
+        Appointment found = getAppointmentById(appointmentId);
+        AppointmentStatus appointmentStatus = appointmentStatusSRV.getAppointmentStatusById(appointmentStatusDTO.appointment_status_id());
+        found.setAppointmentStatus(appointmentStatus);
+        return appointmentDAO.save(found);
     }
 
     public void delete(UUID id) {

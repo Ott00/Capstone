@@ -23,7 +23,6 @@ public class Appointment {
     private UUID id;
     private LocalDate date;
     private LocalTime time;
-    private boolean confirmation;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -33,10 +32,14 @@ public class Appointment {
     @JoinColumn(name = "performance_id")
     private Performance performance;
 
-    public Appointment(LocalDate date, LocalTime time, User client, Performance performance) {
+    @ManyToOne
+    @JoinColumn(name = "appointment_status_id")
+    private AppointmentStatus appointmentStatus;
+
+    public Appointment(LocalDate date, LocalTime time, AppointmentStatus appointmentStatus, User client, Performance performance) {
         this.date = date;
         this.time = time;
-        this.confirmation = false;
+        this.appointmentStatus = appointmentStatus;
         this.client = client;
         this.performance = performance;
     }
