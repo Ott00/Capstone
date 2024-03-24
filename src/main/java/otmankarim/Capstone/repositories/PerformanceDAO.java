@@ -20,4 +20,7 @@ public interface PerformanceDAO extends JpaRepository<Performance, UUID> {
                                        Pageable pageable);
 
     Page<Performance> findByCategory(Pageable pageable, Category category);
+
+    @Query("SELECT p FROM Performance p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :input, '%'))")
+    Page<Performance> findByInput(Pageable pageable, String input);
 }

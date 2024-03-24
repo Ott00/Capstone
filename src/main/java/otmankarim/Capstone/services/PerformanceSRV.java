@@ -87,6 +87,13 @@ public class PerformanceSRV {
         return performanceDAO.findAll(pageable);
     }
 
+    public Page<Performance> getPerformancesByInput(int pageNum, int size, String orderBy, String searchInput) {
+        if (size > 100) size = 100;
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by(orderBy));
+        return performanceDAO.findByInput(pageable, searchInput);
+    }
+
+
     public Performance save(User freelancer, PerformanceDTO newPerformance) throws IOException {
         Category category = categorySRV.findByName(newPerformance.category());
 

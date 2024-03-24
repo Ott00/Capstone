@@ -41,6 +41,14 @@ public class PerformanceCTRL {
         return this.performanceSRV.getPerformancesFiltered(page, size, orderBy, category, direction);
     }
 
+    @GetMapping("/search")
+    public Page<Performance> getPerformancesByInput(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    @RequestParam(defaultValue = "id") String orderBy,
+                                                    @RequestParam(required = true) String searchInput) {
+        return this.performanceSRV.getPerformancesByInput(page, size, orderBy, searchInput);
+    }
+
 
     @GetMapping("/me")
     @PreAuthorize("hasAuthority('FREELANCER')")
