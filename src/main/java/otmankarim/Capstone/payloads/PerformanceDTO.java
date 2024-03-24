@@ -14,6 +14,8 @@ public record PerformanceDTO(
         double price,
         @NotBlank(message = "location can not be blank")
         String location,
+        @NotBlank(message = "image can not be blank")
+        String image,
         @NotBlank(message = "category can not be blank")
         String category
 ) {

@@ -8,12 +8,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import otmankarim.Capstone.entities.Performance;
 import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.BadRequestException;
+import otmankarim.Capstone.payloads.ImageUploadResponseDTO;
 import otmankarim.Capstone.payloads.PerformanceDTO;
 import otmankarim.Capstone.services.PerformanceSRV;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -56,11 +59,25 @@ public class PerformanceCTRL {
     @PostMapping
     @PreAuthorize("hasAuthority('FREELANCER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public Performance savePerformance(@AuthenticationPrincipal User freelancer, @RequestBody @Validated PerformanceDTO newPerformance, BindingResult validation) {
+    public Performance savePerformance(@AuthenticationPrincipal User freelancer, @RequestBody @Validated PerformanceDTO newPerformance, BindingResult validation) throws IOException {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         }
         return this.performanceSRV.save(freelancer, newPerformance);
+    }
+
+    @PostMapping("/uploadImage")
+    @PreAuthorize("hasAuthority('FREELANCER')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ImageUploadResponseDTO uploadImage(@RequestParam("image") MultipartFile image) throws IOException {
+        return this.performanceSRV.uploadImage(image);
+    }
+
+    @PatchMapping("{id}/uploadImage")
+    @PreAuthorize("hasAuthority('FREELANCER')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String uploadAndUpdateImage(@PathVariable UUID id, @RequestParam("image") MultipartFile image) throws IOException {
+        return this.performanceSRV.uploadAndUpdateImage(image, id);
     }
 
     @PutMapping("/{id}")

@@ -1,19 +1,24 @@
 package otmankarim.Capstone.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import otmankarim.Capstone.entities.Category;
 import otmankarim.Capstone.entities.Performance;
 import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.BadRequestException;
 import otmankarim.Capstone.exceptions.NotFoundException;
+import otmankarim.Capstone.payloads.ImageUploadResponseDTO;
 import otmankarim.Capstone.payloads.PerformanceDTO;
 import otmankarim.Capstone.repositories.PerformanceDAO;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -24,6 +29,8 @@ public class PerformanceSRV {
     private CategorySRV categorySRV;
     @Autowired
     private UserSRV userSRV;
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     public Page<Performance> getPerformances(int pageNum, int size, String orderBy) {
         if (size > 100) size = 100;
@@ -80,7 +87,7 @@ public class PerformanceSRV {
         return performanceDAO.findAll(pageable);
     }
 
-    public Performance save(User freelancer, PerformanceDTO newPerformance) {
+    public Performance save(User freelancer, PerformanceDTO newPerformance) throws IOException {
         Category category = categorySRV.findByName(newPerformance.category());
 
         if (performanceDAO.existsByNameAndFreelancer(newPerformance.title(), freelancer)) {
@@ -92,6 +99,7 @@ public class PerformanceSRV {
                 newPerformance.description(),
                 newPerformance.price(),
                 newPerformance.location(),
+                newPerformance.image(),
                 freelancer,
                 category
         );
@@ -118,5 +126,17 @@ public class PerformanceSRV {
     public void delete(UUID id) {
         Performance found = getPerformanceById(id);
         performanceDAO.delete(found);
+    }
+
+    public String uploadAndUpdateImage(MultipartFile image, UUID performanceId) throws IOException {
+        String urlCover = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
+        Performance found = getPerformanceById(performanceId);
+        found.setImage(urlCover);
+        performanceDAO.save(found);
+        return urlCover;
+    }
+
+    public ImageUploadResponseDTO uploadImage(MultipartFile image) throws IOException {
+        return new ImageUploadResponseDTO((String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url"));
     }
 }
