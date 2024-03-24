@@ -32,7 +32,7 @@ public class AppointmentCTRL {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasAuthority('FREELANCER')")
+    @PreAuthorize("hasAnyAuthority('FREELANCER','CLIENT')")
     public Page<Appointment> getMyPerformances(@RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size,
                                                @RequestParam(defaultValue = "date") String orderBy,

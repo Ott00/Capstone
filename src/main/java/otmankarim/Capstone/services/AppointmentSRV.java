@@ -39,7 +39,11 @@ public class AppointmentSRV {
     public Page<Appointment> getMyAppointments(int pageNum, int size, String orderBy, User user) {
         if (size > 100) size = 100;
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by(orderBy));
-        return appointmentDAO.appointmentsByFreelancer(user, pageable);
+
+        if (user.getRole().getRole().equals("FREELANCER")) {
+            return appointmentDAO.appointmentsByFreelancer(user, pageable);
+        } else return appointmentDAO.appointmentsByClient(user, pageable);
+
     }
 
     public Appointment save(AppointmentDTO newAppointment, User client) {

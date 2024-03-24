@@ -20,4 +20,8 @@ public interface AppointmentDAO extends JpaRepository<Appointment, UUID> {
     @Query("SELECT a FROM Appointment a JOIN Performance p ON a.performance = p WHERE p.freelancer = :freelancer")
     Page<Appointment> appointmentsByFreelancer(User freelancer,
                                                Pageable pageable);
+
+    @Query("SELECT a FROM Appointment a WHERE a.client = :client")
+    Page<Appointment> appointmentsByClient(User client,
+                                           Pageable pageable);
 }
