@@ -8,11 +8,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import otmankarim.Capstone.entities.User;
 import otmankarim.Capstone.exceptions.BadRequestException;
 import otmankarim.Capstone.payloads.UserUpdateDTO;
 import otmankarim.Capstone.services.UserSRV;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -52,6 +54,12 @@ public class UserCTRL {
             throw new BadRequestException(validation.getAllErrors());
         }
         return this.userSRV.updateUserById(updatedUser, user.getId());
+    }
+
+    @PatchMapping("/me/uploadAvatar")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updateMe(@AuthenticationPrincipal User user, @RequestParam("avatar") MultipartFile image) throws IOException {
+        this.userSRV.uploadAndUpdateImage(image, user.getId());
     }
 
     @DeleteMapping("/me")
