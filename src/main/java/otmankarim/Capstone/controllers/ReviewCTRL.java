@@ -35,7 +35,7 @@ public class ReviewCTRL {
     }
 
     @GetMapping("/{id}/check")
-    @PreAuthorize("hasAuthority('CLIENT')")
+    @PreAuthorize("hasAnyAuthority('CLIENT', 'FREELANCER')")
     public boolean checkIfExistsReview(@AuthenticationPrincipal User client, @PathVariable UUID id) {
         return this.reviewSRV.checkIfExistsReview(id, client);
     }
