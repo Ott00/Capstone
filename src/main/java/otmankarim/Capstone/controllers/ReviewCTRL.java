@@ -34,6 +34,18 @@ public class ReviewCTRL {
         return this.reviewSRV.getReviewById(id);
     }
 
+    @GetMapping("/{id}/check")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public boolean checkIfExistsReview(@AuthenticationPrincipal User client, @PathVariable UUID id) {
+        return this.reviewSRV.checkIfExistsReview(id, client);
+    }
+
+    @GetMapping("/{id}/get")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public Review getReviewByPerformanceAndClient(@AuthenticationPrincipal User client, @PathVariable UUID id) {
+        return this.reviewSRV.getReviewByPerformanceAndClient(id, client);
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority('CLIENT')")
     @ResponseStatus(HttpStatus.CREATED)

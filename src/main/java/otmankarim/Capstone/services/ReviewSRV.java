@@ -34,7 +34,7 @@ public class ReviewSRV {
     public Review save(ReviewDTO newReview, User client) {
         Performance performance = performanceSRV.getPerformanceById(newReview.performance_id());
         if (reviewDAO.existsReviewForSamePerformance(performance, client)) {
-            throw new BadRequestException(client.getEmail() + " already made a review for thi performance: " + performance.getTitle());
+            throw new BadRequestException(client.getEmail() + " already made a review for this performance: " + performance.getTitle());
         }
         Review review = new Review(
                 newReview.evaluation(),
@@ -44,6 +44,16 @@ public class ReviewSRV {
                 client
         );
         return reviewDAO.save(review);
+    }
+
+    public boolean checkIfExistsReview(UUID performanceId, User client) {
+        Performance performance = performanceSRV.getPerformanceById(performanceId);
+        return reviewDAO.existsReviewForSamePerformance(performance, client);
+    }
+
+    public Review getReviewByPerformanceAndClient(UUID performanceId, User client) {
+        Performance performance = performanceSRV.getPerformanceById(performanceId);
+        return reviewDAO.findReviewByPerformanceAndClient(performance, client);
     }
 
     public Review getReviewById(UUID id) {

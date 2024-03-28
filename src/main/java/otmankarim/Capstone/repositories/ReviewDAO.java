@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface ReviewDAO extends JpaRepository<Review, UUID> {
     @Query("SELECT COUNT(r) > 0 FROM Review r WHERE r.client = :client AND r.performance = :performance")
     boolean existsReviewForSamePerformance(Performance performance, User client);
+
+    Review findReviewByPerformanceAndClient(Performance performance, User client);
 }
