@@ -34,6 +34,14 @@ public class ReviewCTRL {
         return this.reviewSRV.getReviewById(id);
     }
 
+    @GetMapping("/me")
+    public Page<Review> getReviewsByFreelancer(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size,
+                                               @RequestParam(defaultValue = "id") String orderBy,
+                                               @AuthenticationPrincipal User freelancer) {
+        return this.reviewSRV.getReviewsByFreelancer(freelancer, page, size, orderBy);
+    }
+
     @GetMapping("/{id}/check")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'FREELANCER')")
     public boolean checkIfExistsReview(@AuthenticationPrincipal User client, @PathVariable UUID id) {

@@ -60,6 +60,12 @@ public class ReviewSRV {
         return reviewDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
+    public Page<Review> getReviewsByFreelancer(User freelancer, int pageNum, int size, String orderBy) {
+        if (size > 100) size = 100;
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by(orderBy));
+        return reviewDAO.findByFreelancer(freelancer, pageable);
+    }
+
     public Review updateReviewById(ReviewDTO updatedReview, UUID id) {
         Review found = getReviewById(id);
         found.setTitle(updatedReview.title());
