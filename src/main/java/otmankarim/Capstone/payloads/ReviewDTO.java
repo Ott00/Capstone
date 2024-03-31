@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public record ReviewDTO(
         @NotNull(message = "evaluation can not be null")
-        @Min(value = 1)
-        @Max(value = 5)
+        @Min(value = 1, message = "evaluation must be greater than 0")
+        @Max(value = 5, message = "evaluation can not be more than 5")
         int evaluation,
         @NotBlank(message = "title can not be blank")
         String title,
