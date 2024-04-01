@@ -66,6 +66,12 @@ public class ReviewSRV {
         return reviewDAO.findByFreelancer(freelancer, pageable);
     }
 
+    public Page<Review> getReviewsByClient(User client, int pageNum, int size, String orderBy) {
+        if (size > 100) size = 100;
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by(orderBy));
+        return reviewDAO.findByClient(client, pageable);
+    }
+
     public Review updateReviewById(ReviewDTO updatedReview, UUID id) {
         Review found = getReviewById(id);
         found.setTitle(updatedReview.title());

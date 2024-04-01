@@ -20,4 +20,6 @@ public interface ReviewDAO extends JpaRepository<Review, UUID> {
 
     @Query("SELECT r FROM Review r JOIN r.performance p WHERE p.freelancer = :freelancer")
     Page<Review> findByFreelancer(User freelancer, Pageable pageable);
+
+    Page<Review> findByClient(User client, Pageable pageable);
 }

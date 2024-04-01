@@ -34,12 +34,22 @@ public class ReviewCTRL {
         return this.reviewSRV.getReviewById(id);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/freelancer/me")
+    @PreAuthorize("hasAuthority('FREELANCER')")
     public Page<Review> getReviewsByFreelancer(@RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size,
                                                @RequestParam(defaultValue = "id") String orderBy,
                                                @AuthenticationPrincipal User freelancer) {
         return this.reviewSRV.getReviewsByFreelancer(freelancer, page, size, orderBy);
+    }
+
+    @GetMapping("/client/me")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public Page<Review> getReviewsByClient(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int size,
+                                           @RequestParam(defaultValue = "id") String orderBy,
+                                           @AuthenticationPrincipal User client) {
+        return this.reviewSRV.getReviewsByClient(client, page, size, orderBy);
     }
 
     @GetMapping("/{id}/check")
