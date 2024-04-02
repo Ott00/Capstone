@@ -35,10 +35,10 @@ public class Performance {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "performance")
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     private Set<Appointment> appointments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "performance")
+    @OneToMany(mappedBy = "performance", cascade = CascadeType.REMOVE)
     private Set<Review> reviews = new LinkedHashSet<>();
 
     public Performance(String title, String description, double price, String location, String image, User freelancer, Category category) {
